@@ -64,7 +64,8 @@ const login = (req, res) => {
 
         const token = jwt.sign({ id_usuario: usuario.id_usuario, rol: usuario.rol }, 'secreto', { expiresIn: '1h' });
 
-        res.json({ mensaje: "Login exitoso", token });
+        res.json({ mensaje: "Login exitoso", usuario, token });
+
     });
 };
 

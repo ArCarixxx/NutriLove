@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography, Container } from "@mui/material";
+import logo from "../assets/Logo-NutriLove.png";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -38,9 +39,12 @@ function Login() {
   return (
     <Container maxWidth="xs">
     <br></br><br></br><br></br>
+    <img src={logo} alt="NutriLove Logo" style={{ height: 300 }} />
+      <center>
       <Typography variant="h4" gutterBottom>
         Iniciar Sesión
       </Typography>
+      </center>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Usuario"

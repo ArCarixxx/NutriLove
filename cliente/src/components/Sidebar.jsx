@@ -3,6 +3,8 @@ import React from 'react';
 import { Drawer, List, ListItem, ListItemText, Divider, ListItemIcon, IconButton } from '@mui/material';
 import { Home, Person, Task, VolunteerActivism, Settings, ExitToApp } from '@mui/icons-material'; 
 import { useNavigate } from 'react-router-dom';
+import logo from "../assets/Logo-NutriLove.png";
+import letras from "../assets/LogoBlanco.png";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -15,10 +17,10 @@ const Sidebar = () => {
   return (
     <Drawer
       sx={{
-        width: 240,
+        width: 270,
         flexShrink: 0,
         '& .MuiDrawer-paper': {
-          width: 240,
+          width: 270,
           boxSizing: 'border-box',
           backgroundColor: '#7BA449',
           color: 'white',
@@ -27,13 +29,12 @@ const Sidebar = () => {
       variant="permanent"
       anchor="left"
     >
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <img
-          src="https://via.placeholder.com/50" // Aquí va tu logo
-          alt="Logo"
-          style={{ marginBottom: '10px' }}
-        />
-        <h2>NutriLove</h2>
+      <div style={{ padding: '20px', textAlign: '<center' }}>
+      <center>
+        <img src={logo} alt="NutriLove Logo" style={{ height: 150 }} />
+        <img src={letras} alt="NutriLove Letras" style={{ height: 90, marginRight: 30 }} />
+      </center>
+               
       </div>
       <Divider />
       <List>

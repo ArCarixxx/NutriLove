@@ -27,7 +27,7 @@ function Header() {
         variant="contained"
         color="primary"
         sx={{ backgroundColor: "#E29038", '&:hover': { backgroundColor: "#C7742E" } }}>
-          Cerrar Sesión
+          Iniciar Sesión
         </Button>
       </Toolbar>
     </AppBar>

@@ -1,7 +1,14 @@
-const Voluntario = require('../models/Voluntario');
+const Voluntario = require("../models/Voluntario");
 
 const obtenerVoluntarios = (req, res) => {
     Voluntario.obtenerTodos((err, resultados) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(resultados);
+    });
+};
+
+const obtenerVoluntariosCompleto = (req, res) => {
+    Voluntario.obtenerVoluntarioCompleto((err, resultados) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(resultados);
     });
@@ -43,8 +50,9 @@ const eliminarVoluntario = (req, res) => {
 
 module.exports = {
     obtenerVoluntarios,
+    obtenerVoluntariosCompleto,
     obtenerVoluntarioPorId,
     crearVoluntario,
     actualizarVoluntario,
-    eliminarVoluntario
+    eliminarVoluntario,
 };

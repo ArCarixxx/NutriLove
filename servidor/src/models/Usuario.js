@@ -4,6 +4,9 @@ const Usuario = {
     obtenerTodos: (callback) => {
         db.query('SELECT * FROM Usuario', callback);
     },
+    obtenerRolVoluntario: (callback) => {
+        db.query('SELECT * FROM Usuario WHERE rol = "Voluntario"', callback);
+    },
     obtenerPorId: (id, callback) => {
         db.query('SELECT * FROM Usuario WHERE id_usuario = ?', [id], callback);
     },

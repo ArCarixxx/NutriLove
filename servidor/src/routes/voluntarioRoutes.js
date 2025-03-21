@@ -1,11 +1,12 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const voluntarioController = require('../controllers/voluntarioController');
+const VoluntarioController = require("../controllers/voluntarioController");
 
-router.get('/', voluntarioController.obtenerVoluntarios);
-router.get('/:id', voluntarioController.obtenerVoluntarioPorId);
-router.post('/', voluntarioController.crearVoluntario);
-router.put('/:id', voluntarioController.actualizarVoluntario);
-router.delete('/:id', voluntarioController.eliminarVoluntario);
+router.get("/", VoluntarioController.obtenerVoluntarios);
+router.get("/completo", VoluntarioController.obtenerVoluntariosCompleto);
+router.get("/:id", VoluntarioController.obtenerVoluntarioPorId);
+router.post("/", VoluntarioController.crearVoluntario);
+router.put("/:id", VoluntarioController.actualizarVoluntario);
+router.delete("/:id", VoluntarioController.eliminarVoluntario);
 
 module.exports = router;

@@ -7,6 +7,12 @@ const obtenerUsuarios = (req, res) => {
         res.json(resultados);
     });
 };
+const obtenerVoluntario = (req, res) => {
+    Usuario.obtenerRolVoluntario((err, resultados) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(resultados);
+    });
+};
 
 const obtenerUsuarioPorId = (req, res) => {
     const { id } = req.params;
@@ -72,6 +78,7 @@ const login = (req, res) => {
 
 module.exports = {
     obtenerUsuarios,
+    obtenerVoluntario,
     obtenerUsuarioPorId,
     crearUsuario,
     actualizarUsuario,

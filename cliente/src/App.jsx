@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import DashboardLayout from "./components/DashboardLayout";
-import HeaderHome from "./components/HeaderHome";
+import HeaderLayout from "./components/HomeLayout";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
 
@@ -13,12 +13,13 @@ import Voluntario from "./pages/Voluntario";
 import Tarea from "./pages/Tarea";
 import Asignacion from "./pages/Asignacion";
 import Registro from "./pages/Registro";
+import RegistroVoluntario from "./pages/RegistroVoluntario";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
     <Routes>
-      <Route path="/" element={<HeaderHome><Home /></HeaderHome>} />
+    <Route path="/" element={<HeaderLayout><Home /></HeaderLayout>} />
       <Route path="/login" element={<Login />} />
       
       {/* Solo Dashboard tiene el layout con Header y Sidebar */}
@@ -29,6 +30,7 @@ function App() {
       <Route path="/tarea" element={<DashboardLayout><Tarea /></DashboardLayout>} />
       <Route path="/asignacion" element={<DashboardLayout><Asignacion /></DashboardLayout>} />
       <Route path="/actividad" element={<DashboardLayout><Registro /></DashboardLayout>} />
+      <Route path="/registro" element={<HeaderLayout><RegistroVoluntario /></HeaderLayout>} />
     </Routes>
     </ThemeProvider>
   );

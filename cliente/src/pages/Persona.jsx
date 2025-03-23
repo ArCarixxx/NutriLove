@@ -31,7 +31,7 @@ const Personas = () => {
   const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/personas")
+    fetch("http://localhost:5000/api/personas/usuario")
       .then((res) => res.json())
       .then((data) => {
         setPersonas(data);
@@ -63,7 +63,7 @@ const Personas = () => {
       .then((res) => res.json())
       .then(() => {
         setOpen(false);
-        window.location.reload(); // Recargar para ver cambios
+        window.location.reload();
       });
   };
 
@@ -78,11 +78,10 @@ const Personas = () => {
     }).then(() => {
       setConfirmOpen(false);
       setDeleteId(null);
-      window.location.reload(); // Recargar para ver cambios
+      window.location.reload();
     });
   };
 
-  // Filtrar personas en tiempo real
   useEffect(() => {
     setFilteredPersonas(
       personas.filter((p) =>
@@ -122,6 +121,8 @@ const Personas = () => {
               <TableCell><strong>Teléfono</strong></TableCell>
               <TableCell><strong>Dirección</strong></TableCell>
               <TableCell><strong>Fecha Nacimiento</strong></TableCell>
+              <TableCell><strong>Usuario</strong></TableCell>
+              <TableCell><strong>Rol</strong></TableCell>
               <TableCell><strong>Acciones</strong></TableCell>
             </TableRow>
           </TableHead>
@@ -134,6 +135,8 @@ const Personas = () => {
                 <TableCell>{persona.telefono}</TableCell>
                 <TableCell>{persona.direccion}</TableCell>
                 <TableCell>{persona.fecha_nacimiento}</TableCell>
+                <TableCell>{persona.username}</TableCell> {/* Nuevo campo */}
+                <TableCell>{persona.rol}</TableCell> {/* Nuevo campo */}
                 <TableCell>
                   <IconButton color="primary" onClick={() => handleOpen(persona)}>
                     <Edit />

@@ -9,6 +9,10 @@ function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem("usuario");
+    navigate("/");
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Limpiar errores anteriores
@@ -71,6 +75,14 @@ function Login() {
           style={{ marginTop: "16px" }}
         >
           Ingresar
+        </Button>
+        <Button onClick={handleLogout}
+          variant="contained"
+          color="secondary"
+          fullWidth
+          style={{ marginTop: "16px" }}
+        >
+          Cancelar
         </Button>
       </form>
       {error && <Typography color="error" style={{ marginTop: "16px" }}>{error}</Typography>}

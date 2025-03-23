@@ -1,15 +1,38 @@
 import { useForm } from "react-hook-form";
-import { TextField, Button, Grid, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { TextField, Button, Grid, MenuItem } from "@mui/material";
 
 const PersonaForm = ({ onSubmit, initialData = {} }) => {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm({
-    defaultValues: initialData,
+    defaultValues: initialData, // Cargar datos iniciales
   });
-  
+
+  // Observar cambios en los campos clave
+  const nombre = watch("nombre", initialData.nombre || "");
+  const apellido = watch("apellido", initialData.apellido || "");
+  const fechaNacimiento = watch("fecha_nacimiento", initialData.fecha_nacimiento || "");
+
+  // Generar usuario y contraseña al modificar los valores clave
+  useEffect(() => {
+    if (nombre && apellido) {
+      const username = `${nombre.charAt(0)}${apellido}`.toLowerCase();
+      setValue("usuario", username);
+    }
+    if (nombre && fechaNacimiento) {
+      const anioNacimiento = fechaNacimiento.split("-")[0];
+      if (anioNacimiento) {
+        const password = `${nombre}${anioNacimiento}`;
+        setValue("contrasenia", password);
+      }
+    }
+  }, [nombre, apellido, fechaNacimiento, setValue]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
@@ -82,10 +105,48 @@ const PersonaForm = ({ onSubmit, initialData = {} }) => {
             helperText={errors.fecha_nacimiento?.message}
           />
         </Grid>
+
+        {/* Campo Usuario */}
+        <Grid item xs={6}>
+          <TextField
+            fullWidth
+            label="Usuario"
+            {...register("usuario", { required: "El usuario es obligatorio" })}
+            error={!!errors.usuario}
+            helperText={errors.usuario?.message}
+          />
+        </Grid>
+
+        {/* Campo Contraseña */}
+        <Grid item xs={6}>
+          <TextField
+            fullWidth
+            label="Contraseña"
+            type="password"
+            {...register("contrasenia", { required: "La contraseña es obligatoria" })}
+            error={!!errors.contrasenia}
+            helperText={errors.contrasenia?.message}
+          />
+        </Grid>
+
+        {/* Selector de Rol */}
+        <Grid item xs={6}>
+          <TextField
+            select
+            fullWidth
+            label="Rol"
+            {...register("rol", { required: "El rol es obligatorio" })}
+            error={!!errors.rol}
+            helperText={errors.rol?.message}
+          >
+            <MenuItem value="Administrador">Administrador</MenuItem>
+            <MenuItem value="Voluntario">Voluntario</MenuItem>
+          </TextField>
+        </Grid>
       </Grid>
 
       <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-        {initialData.id_persona ? "Actualizar" : "Agregar"}
+        Guardar
       </Button>
     </form>
   );

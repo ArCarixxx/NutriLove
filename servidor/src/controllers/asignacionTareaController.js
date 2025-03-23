@@ -6,6 +6,12 @@ const obtenerAsignaciones = (req, res) => {
         res.json(resultados);
     });
 };
+const obtenerAsignacionCompleto = (req, res) => {
+    AsignacionTarea.obtenerAsignacionCompleto((err, resultados) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(resultados);
+    });
+};
 
 const obtenerAsignacionPorId = (req, res) => {
     const { id } = req.params;
@@ -43,6 +49,7 @@ const eliminarAsignacion = (req, res) => {
 
 module.exports = {
     obtenerAsignaciones,
+    obtenerAsignacionCompleto,
     obtenerAsignacionPorId,
     crearAsignacion,
     actualizarAsignacion,

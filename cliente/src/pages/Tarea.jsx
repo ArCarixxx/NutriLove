@@ -21,96 +21,133 @@ import {
 import { Edit, Add, Search, Delete } from "@mui/icons-material";
 import TareaForm from "../components/TareaForm";
 
-const GestionTareas = () => {
-    const [tareas, setTareas] = useState([]);
-    const [busqueda, setBusqueda] = useState("");
-    const [tareaEditando, setTareaEditando] = useState(null);
-    const [modalOpen, setModalOpen] = useState(false);
+const Tareas = () => {
+  const [tareas, setTareas] = useState([]);
+  const [filteredTareas, setFilteredTareas] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedTarea, setSelectedTarea] = useState(null);
+  const [search, setSearch] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
-    useEffect(() => {
-        cargarTareas();
-    }, []);
+  useEffect(() => {
+    fetch("http://localhost:5000/api/tareas")
+      .then((res) => res.json())
+      .then((data) => {
+        setTareas(data);
+        setFilteredTareas(data);
+      });
+  }, []);
 
-    const cargarTareas = () => {
-        axios.get("http://localhost:5000/api/tareas")
-            .then(response => setTareas(response.data))
-            .catch(error => console.error("Error cargando tareas:", error));
-    };
+  const handleOpen = (tarea = null) => {
+    console.log("Tarea seleccionada:", tarea); // Verificar en consola
+    setSelectedTarea(tarea);
+    setOpen(true);
+  };
 
-    const handleBuscar = (e) => {
-        setBusqueda(e.target.value);
-    };
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedTarea(null);
+  };
 
-    const handleEliminar = (id) => {
-        if (window.confirm("¿Seguro que deseas eliminar esta tarea?")) {
-            axios.delete(`http://localhost:5000/api/tareas/${id}`)
-                .then(() => cargarTareas())
-                .catch(error => console.error("Error eliminando tarea:", error));
-        }
-    };
+  const handleSave = (data) => {
+    const url = selectedTarea
+      ? `http://localhost:5000/api/tareas/${selectedTarea.id_tarea}`
+      : "http://localhost:5000/api/tareas";
+    const method = selectedTarea ? "PUT" : "POST";
+    fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        setOpen(false);
+        window.location.reload(); // Recargar para ver cambios
+      });
+  };
 
-    const handleEditar = (tarea) => {
-        setTareaEditando(tarea);
-        setModalOpen(true);
-    };
+  const handleDeleteConfirm = (id) => {
+    setDeleteId(id);
+    setConfirmOpen(true);
+  };
 
-    const handleGuardar = () => {
-        setModalOpen(false);
-        setTareaEditando(null);
-        cargarTareas();
-    };
+  const handleDelete = () => {
+    fetch(`http://localhost:5000/api/tareas/${deleteId}`, {
+      method: "DELETE",
+    }).then(() => {
+      setConfirmOpen(false);
+      setDeleteId(null);
+      window.location.reload(); // Recargar para ver cambios
+    });
+  };
 
-    return (
-        <Container>
-            <Typography variant="h4" sx={{ textAlign: "center", my: 2 }}>
-              Gestión de Voluntarios
-            </Typography>
-            <TextField
-                    variant="outlined"
-                    label="Buscar voluntario..."
-                    fullWidth
-                    sx={{ mb: 2 }}
-                    InputProps={{
-                      startAdornment: <Search sx={{ mr: 1 }} />,
-                    }}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-            
-            <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 2 }}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Título</TableCell>
-                            <TableCell>Descripción</TableCell>
-                            <TableCell>Fecha Creación</TableCell>
-                            <TableCell>Fecha Límite</TableCell>
-                            <TableCell>Estado</TableCell>
-                            <TableCell>Acciones</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {tareas.filter(t => t.titulo.toLowerCase().includes(busqueda.toLowerCase())).map((tarea) => (
-                            <TableRow key={tarea.id_tarea}>
-                                <TableCell>{tarea.titulo}</TableCell>
-                                <TableCell>{tarea.descripcion}</TableCell>
-                                <TableCell>{tarea.fecha_creacion}</TableCell>
-                                <TableCell>{tarea.fecha_limite}</TableCell>
-                                <TableCell>{tarea.estado}</TableCell>
-                                <TableCell>
-                                    <IconButton color="primary" onClick={() => handleOpen(tarea)}>
-                                      <Edit />
-                                    </IconButton>
-                                    <IconButton color="error" onClick={() => handleDeleteConfirm(tarea.id_tarea)}>
-                                      <Delete />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+  // Filtrar tareas en tiempo real
+  useEffect(() => {
+    setFilteredTareas(
+      tareas.filter((t) =>
+        Object.values(t).some((val) =>
+          String(val).toLowerCase().includes(search.toLowerCase())
+        )
+      )
+    );
+  }, [search, tareas]);
 
-            <Fab
+  return (
+    <Container>
+      <Typography variant="h4" sx={{ textAlign: "center", my: 2 }}>
+        Gestión de Tareas
+      </Typography>
+
+      {/* Buscador */}
+      <TextField
+        variant="outlined"
+        label="Buscar tarea..."
+        fullWidth
+        sx={{ mb: 2 }}
+        InputProps={{
+          startAdornment: <Search sx={{ mr: 1 }} />,
+        }}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      {/* Tabla de Tareas */}
+      <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+              <TableCell><strong>Título</strong></TableCell>
+              <TableCell><strong>Descripción</strong></TableCell>
+              <TableCell><strong>Fecha de Creación</strong></TableCell>
+              <TableCell><strong>Fecha Límite</strong></TableCell>
+              <TableCell><strong>Estado</strong></TableCell>
+              <TableCell><strong>Acciones</strong></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredTareas.map((tarea) => (
+              <TableRow key={tarea.id_tarea}>
+                <TableCell>{tarea.titulo}</TableCell>
+                <TableCell>{tarea.descripcion}</TableCell>
+                <TableCell>{new Date(tarea.fecha_creacion).toLocaleString()}</TableCell>
+                <TableCell>{tarea.fecha_limite ? new Date(tarea.fecha_limite).toLocaleString() : 'Sin fecha'}</TableCell>
+                <TableCell>{tarea.estado}</TableCell>
+                <TableCell>
+                  <IconButton color="primary" onClick={() => handleOpen(tarea)}>
+                    <Edit />
+                  </IconButton>
+                  <IconButton color="error" onClick={() => handleDeleteConfirm(tarea.id_tarea)}>
+                    <Delete />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Botón flotante para agregar */}
+      <Fab
         color="primary"
         aria-label="add"
         sx={{ position: "fixed", bottom: 20, right: 20 }}
@@ -119,17 +156,17 @@ const GestionTareas = () => {
         <Add />
       </Fab>
 
-      {/* Modal para agregar/editar voluntario */}
+      {/* Modal para agregar/editar tarea */}
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle>{selectedVoluntario ? "Editar Voluntario" : "Agregar Voluntario"}</DialogTitle>
+        <DialogTitle>{selectedTarea ? "Editar Tarea" : "Agregar Tarea"}</DialogTitle>
         <DialogContent>
-          <VoluntarioForm onSubmit={handleSave} initialData={selectedVoluntario || {}} />
+          <TareaForm onSave={handleSave} initialData={selectedTarea || {}} />
         </DialogContent>
       </Dialog>
 
       {/* Modal de confirmación para eliminar */}
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-        <DialogTitle>¿Estás seguro de eliminar este voluntario?</DialogTitle>
+        <DialogTitle>¿Estás seguro de eliminar esta tarea?</DialogTitle>
         <DialogActions>
           <Button onClick={() => setConfirmOpen(false)} color="primary">
             Cancelar
@@ -140,7 +177,7 @@ const GestionTareas = () => {
         </DialogActions>
       </Dialog>
     </Container>
-    );
+  );
 };
 
-export default GestionTareas;
+export default Tareas;

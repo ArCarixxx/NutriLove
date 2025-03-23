@@ -3,6 +3,7 @@ const router = express.Router();
 const asignacionTareaController = require('../controllers/asignacionTareaController');
 
 router.get('/', asignacionTareaController.obtenerAsignaciones);
+router.get('/completo', asignacionTareaController.obtenerAsignacionCompleto);
 router.get('/:id', asignacionTareaController.obtenerAsignacionPorId);
 router.post('/', asignacionTareaController.crearAsignacion);
 router.put('/:id', asignacionTareaController.actualizarAsignacion);

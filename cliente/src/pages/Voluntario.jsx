@@ -40,9 +40,11 @@ const Voluntarios = () => {
   }, []);
 
   const handleOpen = (voluntario = null) => {
+    console.log("Voluntario seleccionado:", voluntario); // Verificar en consola
     setSelectedVoluntario(voluntario);
     setOpen(true);
   };
+  
 
   const handleClose = () => {
     setOpen(false);
@@ -160,7 +162,7 @@ const Voluntarios = () => {
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle>{selectedVoluntario ? "Editar Voluntario" : "Agregar Voluntario"}</DialogTitle>
         <DialogContent>
-          <VoluntarioForm onSubmit={handleSave} initialData={selectedVoluntario || {}} />
+          <VoluntarioForm onSave={handleSave} initialData={selectedVoluntario || {}} />
         </DialogContent>
       </Dialog>
 

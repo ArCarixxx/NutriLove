@@ -6,6 +6,12 @@ const obtenerPersonas = (req, res) => {
         res.json(resultados);
     });
 };
+const obtenerPersonasUsuarios = (req, res) => {
+    Persona.obtenerPersonaUSuario((err, resultados) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(resultados);
+    });
+};
 
 const obtenerPersonaPorId = (req, res) => {
     const { id } = req.params;
@@ -21,6 +27,14 @@ const crearPersona = (req, res) => {
     Persona.crear(nuevaPersona, (err, resultado) => {
         if (err) return res.status(500).json({ error: err.message });
         res.status(201).json({ mensaje: "Persona creada", id: resultado.insertId });
+    });
+};
+
+const crearVoluntario = (req, res) => {
+    const nuevaPersona = req.body;
+    Persona.crearVoluntario(nuevaPersona, (err, resultado) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(201).json({ mensaje: "Voluntario creado", id: resultado.insertId });
     });
 };
 
@@ -43,8 +57,10 @@ const eliminarPersona = (req, res) => {
 
 module.exports = {
     obtenerPersonas,
+    obtenerPersonasUsuarios,
     obtenerPersonaPorId,
     crearPersona,
+    crearVoluntario,
     actualizarPersona,
     eliminarPersona
 };

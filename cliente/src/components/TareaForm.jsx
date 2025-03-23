@@ -1,66 +1,78 @@
-import { useForm } from "react-hook-form";
-import { TextField, Button, Grid } from "@mui/material";
+import { useState, useEffect } from "react";
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem} from "@mui/material";
 
-const TareaForm = ({ onSubmit, initialData = {} }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: initialData,
+const TareaForm = ({ onSave, initialData }) => {
+  const [formData, setFormData] = useState({
+    titulo: "",
+    descripcion: "",
+    fecha_limite: "",
+    estado: "",
   });
 
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        titulo: initialData.titulo || "",
+        descripcion: initialData.descripcion || "",
+        fecha_limite: initialData.fecha_limite || "",
+        estado: initialData.estado || "",
+      });
+    }
+  }, [initialData]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(formData);
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Título"
-            {...register("titulo", { required: "El título es obligatorio" })}
-            error={!!errors.titulo}
-            helperText={errors.titulo?.message}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Descripción"
-            multiline
-            rows={4}
-            {...register("descripcion", { required: "La descripción es obligatoria" })}
-            error={!!errors.descripcion}
-            helperText={errors.descripcion?.message}
-          />
-        </Grid>
-
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
-            label="Fecha Límite"
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            {...register("fecha_limite", { required: "La fecha límite es obligatoria" })}
-            error={!!errors.fecha_limite}
-            helperText={errors.fecha_limite?.message}
-          />
-        </Grid>
-
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
-            label="Estado"
-            {...register("estado", { required: "El estado es obligatorio" })}
-            error={!!errors.estado}
-            helperText={errors.estado?.message}
-          />
-        </Grid>
-      </Grid>
-
+    <form onSubmit={handleSubmit}>
+      <TextField
+        label="Título"
+        name="titulo"
+        value={formData.titulo}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Descripción"
+        name="descripcion"
+        value={formData.descripcion}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Fecha Límite"
+        name="fecha_limite"
+        InputLabelProps={{ shrink: true }}
+        value={formData.fecha_limite}
+        onChange={handleChange}
+        type="date"
+        fullWidth
+        margin="normal"
+      />
+      <FormControl fullWidth>
+        <InputLabel>Estado</InputLabel>
+        <Select name="estado" value={formData.estado} onChange={handleChange}>
+          <MenuItem value="Pendiente">Pendiente</MenuItem>
+          <MenuItem value="En Proceso">En Proceso</MenuItem>
+          <MenuItem value="Finalizada">Finalizada</MenuItem>
+          <MenuItem value="Cancelado">Cancelado</MenuItem>
+        </Select>
+      </FormControl>
       <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-        {initialData.id_tarea ? "Actualizar" : "Agregar"}
-      </Button>
+        Guardar
+      </Button> 
     </form>
   );
 };

@@ -12,7 +12,7 @@ const RegistroActividadForm = ({ onSave, initialData = {} }) => {
 
   useEffect(() => {
     // Obtener lista de asignaciones desde el backend
-    fetch("http://localhost:5000/api/asignaciones")
+    fetch("http://localhost:5000/api/registros/completo")
       .then((res) => res.json())
       .then((data) => setAsignaciones(data));
   }, []);
@@ -51,9 +51,9 @@ const RegistroActividadForm = ({ onSave, initialData = {} }) => {
                 name="id_asignacion"
                 required
               >
-                {asignaciones.map((asignacion) => (
-                  <MenuItem key={asignacion.id_asignacion} value={asignacion.id_asignacion}>
-                    {`Voluntario: ${asignacion.id_voluntario} - Tarea: ${asignacion.id_tarea}`}
+                {asignaciones.map((registro) => (
+                  <MenuItem key={registro.id_registro} value={registro.id_registro}>
+                    {`Voluntario: ${registro.nombre} ${registro.apellido} - Tarea: ${registro.tarea}`}
                   </MenuItem>
                 ))}
               </Select>
@@ -75,7 +75,7 @@ const RegistroActividadForm = ({ onSave, initialData = {} }) => {
           <Grid item xs={12} md={6}>
             <TextField
               label="Fecha de la Actividad"
-              type="datetime-local"
+              type="date"
               fullWidth
               value={formData.fecha}
               onChange={handleChange}

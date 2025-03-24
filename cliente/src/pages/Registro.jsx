@@ -31,7 +31,7 @@ const RegistroActividades = () => {
   const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/registros")
+    fetch("http://localhost:5000/api/registros/completo")
       .then((res) => res.json())
       .then((data) => {
         setRegistros(data);
@@ -125,7 +125,7 @@ const RegistroActividades = () => {
           <TableBody>
             {filteredRegistros.map((registro) => (
               <TableRow key={registro.id_registro}>
-                <TableCell>{registro.id_asignacion}</TableCell>
+                <TableCell>{registro.tarea}</TableCell>
                 <TableCell>{new Date(registro.fecha).toLocaleDateString()}</TableCell>
                 <TableCell>{registro.descripcion}</TableCell>
                 <TableCell>

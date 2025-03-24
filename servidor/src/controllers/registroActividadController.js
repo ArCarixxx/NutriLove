@@ -6,6 +6,12 @@ const obtenerRegistros = (req, res) => {
         res.json(resultados);
     });
 };
+const obtenerRegistroCompleto = (req, res) => {
+    RegistroActividad.obtenerCompleto((err, resultados) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(resultados);
+    });
+};
 
 const obtenerRegistroPorId = (req, res) => {
     const { id } = req.params;
@@ -43,6 +49,7 @@ const eliminarRegistro = (req, res) => {
 
 module.exports = {
     obtenerRegistros,
+    obtenerRegistroCompleto,
     obtenerRegistroPorId,
     crearRegistro,
     actualizarRegistro,

@@ -151,6 +151,7 @@ const VoluntarioForm = ({ onSave, initialData = {} }) => {
           <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
             Guardar
           </Button>
+          
         </Box>
       </form>
 
